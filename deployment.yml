@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es-amundsen
+  namespace: elastic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: es-amundsen
+  template:
+    metadata:
+      labels:
+        app: es-amundsen
+    spec:
+      containers:
+      - name: es-amundsen
+        image: amitgujar/elastic:latest
+        ports:
+        - containerPort: 9200
+        volumeMounts:
+        - name: azure-file
+          mountPath: /usr/share/elasticsearch/data
+      volumes:
+      - name: azure-file
+        azureFile:
+          secretName: tfstorageisgreat13
+          shareName: custom
+          readOnly: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: es-amundsen-service
+  namespace: elastic-deployment
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 9200
+    name: httpelastic
+  - port: 9300
+    targetPort: 9300
+    name: transportelastic
+  selector:
+    app: es-amundsen
