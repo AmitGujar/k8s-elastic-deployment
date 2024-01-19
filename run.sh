@@ -1,16 +1,18 @@
 #!/bin/bash
 
 # ! warning - make sure you have created storage account with custom file share & secret for the same.
+# ! elastic search deployment needs minimum 16gb ram.
 
 upgrade_ingress() {
-    helm upgrade ingress-nginx ingress-nginx \
-      --repo https://kubernetes.github.io/ingress-nginx \
-      --namespace public-ingress \
-      --set controller.service.externalTrafficPolicy=Local \
-      --set tcp.9200="elastic-deployment/es-amundsen-service:9200" \
-      --set tcp.9300="elastic-deployment/es-amundsen-service:9300"
+    echo "please wait while upgrading nginx..."
+    helm upgrade --install ingress-nginx ingress-nginx \
+        --repo https://kubernetes.github.io/ingress-nginx \
+        --namespace public-ingress \
+        --set controller.service.externalTrafficPolicy=Local \
+        --set tcp.9200="elastic-deployment/es-amundsen-service:9200" \
+        --set tcp.9300="elastic-deployment/es-amundsen-service:9300"
 }
-upgrade_ingress
+#upgrade_ingress
 
 deploy() {
     echo "deploying elastic search...."

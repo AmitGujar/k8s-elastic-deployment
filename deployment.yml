@@ -13,19 +13,34 @@ spec:
       labels:
         app: es-amundsen
     spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - systempool
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - userpool
       containers:
       - name: es-amundsen
         image: amitgujar/elastic:latest
-        ports:
-        - containerPort: 9200
         volumeMounts:
         - name: azure-file
           mountPath: /usr/share/elasticsearch/data
       volumes:
       - name: azure-file
         azureFile:
-          secretName: tfstorageisgreat13
-          shareName: custom
+          secretName: stcontaineraccount
+          shareName: akshare
           readOnly: false
 ---
 apiVersion: v1

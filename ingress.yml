@@ -9,10 +9,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - es.akstest.tech
+    - dev.akstest.tech
     secretName: tls-secret
   rules:
-  - host: es.akstest.tech
+  - host: dev.akstest.tech
     http:
       paths:
       - pathType: Prefix
