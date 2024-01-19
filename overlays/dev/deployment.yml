@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: es-amundsen
+  namespace: elastic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: es-amundsen
+  template:
+    metadata:
+      labels:
+        app: es-amundsen
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - systempool
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: agentpool
+                operator: In
+                values:
+                - userpool
+      containers:
+      - name: es-amundsen
+        image: amitgujar/elastic:latest
+        volumeMounts:
+        - name: azure-file
+          mountPath: /usr/share/elasticsearch/data
+      volumes:
+      - name: azure-file
+        azureFile:
+          secretName: stcontaineraccount
+          shareName: akshare
+          readOnly: false
