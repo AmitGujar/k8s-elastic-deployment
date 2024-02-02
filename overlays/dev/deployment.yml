@@ -4,6 +4,8 @@ metadata:
   name: es-amundsen
   namespace: elastic-deployment
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -39,6 +41,6 @@ spec:
       volumes:
       - name: azure-file
         azureFile:
-          secretName: stcontaineraccount
+          secretName: tfstorageisgreat20
           shareName: akshare
           readOnly: false
