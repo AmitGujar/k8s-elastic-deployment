@@ -41,6 +41,6 @@ spec:
       volumes:
       - name: azure-file
         azureFile:
-          secretName: tfstorageisgreat20
+          secretName: tfstorageisgreat15
           shareName: akshare
           readOnly: false
