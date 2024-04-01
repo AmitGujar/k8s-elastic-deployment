@@ -5,7 +5,7 @@ resources:
 - ../../cdp
 
 patches:
-- path: dev-secret.yml
+# - path: dev-secret.yml
 - path: deployment.yml
 - path: service.yml
 - path: ingress.yml
